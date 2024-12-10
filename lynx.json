@@ -5,6 +5,7 @@
         "https://zksync-sepolia.drpc.org"
     ],
     "80002": [
+        "https://polygon-amoy.drpc.org",
         "https://polygon-amoy-bor-rpc.publicnode.com",
         "https://rpc-amoy.polygon.technology"
     ],
