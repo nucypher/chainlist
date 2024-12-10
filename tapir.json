@@ -11,32 +11,5 @@
     "80002": [
         "https://rpc-amoy.polygon.technology",
         "https://polygon-amoy-bor-rpc.publicnode.com"
-    ],
-    "84532": [
-        "https://base-sepolia.gateway.tenderly.co",
-        "https://base-sepolia-rpc.publicnode.com",
-        "https://sepolia.base.org"
-    ],
-    "534351": [
-        "https://rpc.ankr.com/scroll_sepolia_testnet",
-        "https://scroll-sepolia-rpc.publicnode.com",
-        "https://sepolia-rpc.scroll.io",
-        "https://scroll-sepolia.chainstacklabs.com"
-    ],
-    "421614": [
-        "https://api.zan.top/arb-sepolia",
-        "https://arbitrum-sepolia.gateway.tenderly.co",
-        "https://sepolia-rollup.arbitrum.io/rpc"
-    ],
-    "11155420": [
-        "https://sepolia.optimism.io",
-        "https://api.zan.top/opt-sepolia",
-        "https://optimism-sepolia.blockpi.network/v1/rpc/public",
-        "https://endpoints.omniatech.io/v1/op/sepolia/public"
-    ],
-    "300": [
-        "https://zksync-era-sepolia.blockpi.network/v1/rpc/public",
-        "https://sepolia.era.zksync.dev",
-        "https://zksync-sepolia.drpc.org"
     ]
 }
