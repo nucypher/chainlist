@@ -1,10 +1,10 @@
 import json
-import glob
-import os
+from pathlib import Path
 
 """
-Run this file with `python3 sort_json.py`
+Run this file with `python3 ./scripts/sort_json.py`
 """
+
 
 def sort_json_file(file_path):
     try:
@@ -25,6 +25,7 @@ def sort_json_file(file_path):
     except Exception as e:
         print(f"Error processing {file_path}: {str(e)}")
 
+
 # Process all JSON files in the directory
-for json_file in glob.glob("*.json"):
+for json_file in Path(__file__).parent.parent.glob("*.json"):
     sort_json_file(json_file)
