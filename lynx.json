@@ -1,0 +1,56 @@
+{
+    "1": [
+        "https://cloudflare-eth.com",
+        "https://ethereum-rpc.publicnode.com",
+        "https://mainnet.gateway.tenderly.co",
+        "https://rpc.flashbots.net",
+        "https://rpc.mevblocker.io"
+    ],
+    "137": [
+        "https://polygon-bor-rpc.publicnode.com",
+        "https://polygon-rpc.com",
+        "https://polygon.drpc.org",
+        "https://polygon.gateway.tenderly.co"
+    ],
+    "300": [
+        "https://sepolia.era.zksync.dev",
+        "https://zksync-era-sepolia.blockpi.network/v1/rpc/public",
+        "https://zksync-sepolia.drpc.org"
+    ],
+    "80002": [
+        "https://polygon-amoy-bor-rpc.publicnode.com",
+        "https://polygon-amoy.drpc.org",
+        "https://rpc-amoy.polygon.technology"
+    ],
+    "84532": [
+        "https://base-sepolia-rpc.publicnode.com",
+        "https://base-sepolia.gateway.tenderly.co",
+        "https://sepolia.base.org"
+    ],
+    "421614": [
+        "https://api.zan.top/arb-sepolia",
+        "https://arbitrum-sepolia.gateway.tenderly.co",
+        "https://sepolia-rollup.arbitrum.io/rpc"
+    ],
+    "534351": [
+        "https://rpc.ankr.com/scroll_sepolia_testnet",
+        "https://scroll-sepolia-rpc.publicnode.com",
+        "https://scroll-sepolia.chainstacklabs.com",
+        "https://sepolia-rpc.scroll.io"
+    ],
+    "11155111": [
+        "https://ethereum-sepolia-rpc.publicnode.com",
+        "https://rpc-sepolia.rockx.com",
+        "https://rpc.sepolia.ethpandaops.io",
+        "https://rpc.sepolia.org",
+        "https://rpc2.sepolia.org",
+        "https://sepolia.drpc.org",
+        "https://sepolia.gateway.tenderly.co"
+    ],
+    "11155420": [
+        "https://api.zan.top/opt-sepolia",
+        "https://endpoints.omniatech.io/v1/op/sepolia/public",
+        "https://optimism-sepolia.blockpi.network/v1/rpc/public",
+        "https://sepolia.optimism.io"
+    ]
+}
