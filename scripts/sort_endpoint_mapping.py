@@ -1,31 +1,40 @@
 import json
 from pathlib import Path
 
-"""
-Run this file with `python3 ./scripts/sort_endpoint_mapping.py`
-"""
+import click
+
+from utils import write_endpoint_mappings_to_file
 
 
 def sort_json_file(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
+    with open(file_path, "r") as f:
+        data = json.load(f)
 
-        # Sort the top-level keys (network IDs)
-        sorted_data = dict(sorted(data.items(), key=lambda x: int(x[0])))
-
-        # Sort the RPC endpoints within each array
-        for key in sorted_data:
-            sorted_data[key] = sorted(sorted_data[key])
-
-        # Write back the sorted data directly
-        with open(file_path, 'w') as f:
-            json.dump(sorted_data, f, indent=4)
-        print(f"Sorted {file_path}")
-    except Exception as e:
-        print(f"Error processing {file_path}: {str(e)}")
+    # sort=True is not needed, but just to be explicit about what the write call is doing
+    write_endpoint_mappings_to_file(
+        json_file=file_path, endpoint_mappings=data, sort=True
+    )
+    print(f"Sorted {file_path}")
 
 
-# Process all JSON files in the directory
-for json_file in Path(__file__).parent.parent.glob("*.json"):
-    sort_json_file(json_file)
+@click.command()
+@click.option(
+    "--domain",
+    "domain",
+    help="TACo Domain",
+    type=click.Choice(["lynx", "tapir", "mainnet"]),
+    required=False,
+)
+def sort_endpoint_mapping(domain):
+    """
+    Sort endpoint mappings file(s) for domain(s). If domain is not specified, all
+    domain endpoint mappings files are sorted.
+    """
+    file_list = Path(__file__).parent.parent.glob(f"{domain if domain else '*'}.json")
+    # Process JSON file(s)
+    for json_file in file_list:
+        sort_json_file(json_file)
+
+
+if __name__ == "__main__":
+    sort_endpoint_mapping()
