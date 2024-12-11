@@ -53,10 +53,7 @@ LYNX_CHAINS = {
 EXTRA_KNOWN_RPC_ENDPOINTS = {
     1: ["https://ethereum-public.nodies.app"],
     10: ["https://optimism-public.nodies.app"],
-    56: [
-        "https://bsc.drpc.org",
-        "https://binance-smart-chain-public.nodies.app"
-    ],
+    56: ["https://bsc.drpc.org", "https://binance-smart-chain-public.nodies.app"],
     97: ["https://bsc-testnet.drpc.org"],
     100: [
         "https://gnosis.drpc.org",
@@ -106,7 +103,7 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
         "https://optimism-sepolia.blockpi.network/v1/rpc/public",
         "https://optimism-sepolia.gateway.tenderly.co",
         "https://optimism-sepolia-public.nodies.app",
-    ]
+    ],
 }
 
 DOMAINS = ["lynx", "tapir", "mainnet"]
@@ -157,12 +154,16 @@ async def _fetch_chain_id_network_public_rpc_endpoints(
         for entry in chain_id_network_result:
             chain_id = entry["chainId"]
             if chain_id in domain_chains:
-                chain_id_endpoints_dict[chain_id] = process_rpc_endpoints(entry.get("rpc", []))
+                chain_id_endpoints_dict[chain_id] = process_rpc_endpoints(
+                    entry.get("rpc", [])
+                )
 
         return chain_id_endpoints_dict
 
 
-async def _validate_chain_id(session: ClientSession, rpc_endpoint: str, expected_chain_id: int) -> bool:
+async def _validate_chain_id(
+    session: ClientSession, rpc_endpoint: str, expected_chain_id: int
+) -> bool:
     data = {
         "jsonrpc": "2.0",
         "method": "eth_chainId",
@@ -171,16 +172,18 @@ async def _validate_chain_id(session: ClientSession, rpc_endpoint: str, expected
     }
 
     async with session.post(
-            rpc_endpoint,
-            json=data,
-            timeout=5,
+        rpc_endpoint,
+        json=data,
+        timeout=5,
     ) as response:
         data = await response.json()
         rpc_chain_id = data["result"]
         return rpc_chain_id == hex(expected_chain_id)
 
 
-async def _validate_block_time(session: ClientSession, rpc_endpoint: str, max_drift_seconds: int) -> bool:
+async def _validate_block_time(
+    session: ClientSession, rpc_endpoint: str, max_drift_seconds: int
+) -> bool:
     data = {
         "jsonrpc": "2.0",
         "method": "eth_getBlockByNumber",
@@ -189,9 +192,9 @@ async def _validate_block_time(session: ClientSession, rpc_endpoint: str, max_dr
     }
 
     async with session.post(
-            rpc_endpoint,
-            json=data,
-            timeout=5,
+        rpc_endpoint,
+        json=data,
+        timeout=5,
     ) as response:
         data = await response.json()
         block_data = data["result"]
@@ -203,7 +206,10 @@ async def _validate_block_time(session: ClientSession, rpc_endpoint: str, max_dr
 
 
 async def _rpc_endpoint_health_check(
-        session: ClientSession, endpoint: str, expected_chain_id: int, max_drift_seconds: int = 60
+    session: ClientSession,
+    endpoint: str,
+    expected_chain_id: int,
+    max_drift_seconds: int = 60,
 ) -> Tuple[bool, str]:
     """
     Checks the health of an Ethereum RPC endpoint by checking chain id matches
@@ -211,13 +217,17 @@ async def _rpc_endpoint_health_check(
     with the system time. The maximum drift allowed is `max_drift_seconds`.
     """
     try:
-        validated_chain_id = await _validate_chain_id(session, endpoint, expected_chain_id)
+        validated_chain_id = await _validate_chain_id(
+            session, endpoint, expected_chain_id
+        )
         if not validated_chain_id:
             raise InvalidChainConfiguration(
                 f"[x!] [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
             )
 
-        validated_block_time = await _validate_block_time(session, endpoint, max_drift_seconds)
+        validated_block_time = await _validate_block_time(
+            session, endpoint, max_drift_seconds
+        )
         if not validated_block_time:
             print(f"[x] RPC endpoint {endpoint} failed health check: drift too large")
             return False, endpoint
@@ -245,7 +255,9 @@ async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
             endpoints_for_chain = set()
 
             # 1. get endpoints from chain id source
-            chain_id_network_endpoints = chain_id_network_rpc_endpoints.get(chain_id, [])
+            chain_id_network_endpoints = chain_id_network_rpc_endpoints.get(
+                chain_id, []
+            )
             endpoints_for_chain.update(chain_id_network_endpoints)
 
             # 2. get endpoints from extra rpc urls source
