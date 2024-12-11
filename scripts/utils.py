@@ -9,7 +9,7 @@ def sort_mappings(endpoint_mappings: Dict[str, List[str]]) -> Dict[str, List[str
 
     # Sort the RPC endpoints within each array
     for key in sorted_data:
-        sorted_data[key] = sorted(sorted_data[key])
+        sorted_data[key] = sorted(set(sorted_data[key]))
 
     return sorted_data
 
