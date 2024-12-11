@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 """
-Run this file with `python3 ./scripts/sort_json.py`
+Run this file with `python3 ./scripts/sort_chain_endpoints_files.py`
 """
 
 
