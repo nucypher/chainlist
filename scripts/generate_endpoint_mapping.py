@@ -1,26 +1,18 @@
 import asyncio
-import json
 import time
+from functools import wraps
 
+import click
 from aiohttp import ClientSession
 from pathlib import Path
 from typing import Dict, List, Tuple
 from urllib.parse import urlparse
 
+from utils import get_file_for_domain, write_endpoint_mappings_to_file
 
-#
-# Only LYNX for now
-#
+MAINNET_CHAINS = [1, 137]  # Ethereum Mainnet  # Polygon Mainnet
 
-#MAINNET_CHAINS = [
-#    1,  # Ethereum Mainnet
-#    137  # Polygon Mainnet
-#]
-
-#TAPIR_CHAINS = [
-#    80002,  # Polygon Amoy
-#    11155111  # Sepolia
-#]
+TAPIR_CHAINS = [80002, 11155111]  # Polygon Amoy  # Sepolia
 
 LYNX_CHAINS = {
     1,  # Ethereum Mainnet
@@ -42,10 +34,10 @@ LYNX_CHAINS = {
     43114,  # Avalanche C-Chain
     80002,  # Amoy
     84532,  # Base Sepolia Testnet
+    314159,  # Filecoin - Calibration testnet
     421614,  # Arbitrum Sepolia
     534351,  # Scroll Sepolia Testnet
     534352,  # Scroll
-    3141592,  # Filecoin - Butterfly testnet
     11155111,  # Sepolia
     11155420,  # OP Sepolia Testnet
 }
@@ -117,12 +109,27 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
     ]
 }
 
+DOMAINS = ["lynx", "tapir", "mainnet"]
+
+DOMAIN_CHAINS = {
+    "lynx": LYNX_CHAINS,
+    "tapir": TAPIR_CHAINS,
+    "mainnet": MAINNET_CHAINS,
+}
 
 CHAINID_NETWORK = "https://chainid.network/chains.json"
 LYNX_JSON = Path(__file__).parent.parent / "lynx.json"
 
 
-def process_rpc_endpoints(endpoints: List[str]) -> List:
+class InvalidChainConfiguration(ValueError):
+    """
+    Raised when endpoint's chain id does not matched expected chain id.
+    """
+
+    pass
+
+
+def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
     rpc_endpoints = set()
     for endpoint in endpoints:
         # ensure no infura key
@@ -141,13 +148,15 @@ def process_rpc_endpoints(endpoints: List[str]) -> List:
     return list(rpc_endpoints)
 
 
-async def _fetch_chain_id_network_public_rpc_endpoints(session) -> Dict[int, List[str]]:
+async def _fetch_chain_id_network_public_rpc_endpoints(
+    session: ClientSession, domain_chains: List[int]
+) -> Dict[int, List[str]]:
     async with session.get(CHAINID_NETWORK) as response:
         chain_id_network_result = await response.json()
         chain_id_endpoints_dict = {}
         for entry in chain_id_network_result:
             chain_id = entry["chainId"]
-            if chain_id in LYNX_CHAINS:
+            if chain_id in domain_chains:
                 chain_id_endpoints_dict[chain_id] = process_rpc_endpoints(entry.get("rpc", []))
 
         return chain_id_endpoints_dict
@@ -204,8 +213,9 @@ async def _rpc_endpoint_health_check(
     try:
         validated_chain_id = await _validate_chain_id(session, endpoint, expected_chain_id)
         if not validated_chain_id:
-            print(f"[x!] [CONFIG ERROR] RPC endpoint {endpoint} failed health check: configured for incorrect chain")
-            return False, endpoint
+            raise InvalidChainConfiguration(
+                f"[x!] [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
+            )
 
         validated_block_time = await _validate_block_time(session, endpoint, max_drift_seconds)
         if not validated_block_time:
@@ -214,18 +224,24 @@ async def _rpc_endpoint_health_check(
 
         return True, endpoint
 
+    except InvalidChainConfiguration as e:
+        raise e
     except Exception as e:
         print(f"[x] RPC endpoint {endpoint} failed health check: {e.__class__} - {e}")
         return False, endpoint
 
 
-async def collect_rpc_endpoints() -> Dict[int, List[str]]:
+async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
     rpc_endpoints_dict = {}
+
+    domain_chains = DOMAIN_CHAINS[domain]
 
     # do this once
     async with ClientSession() as session:
-        chain_id_network_rpc_endpoints = await _fetch_chain_id_network_public_rpc_endpoints(session)
-        for chain_id in LYNX_CHAINS:
+        chain_id_network_rpc_endpoints = (
+            await _fetch_chain_id_network_public_rpc_endpoints(session, domain_chains)
+        )
+        for chain_id in domain_chains:
             endpoints_for_chain = set()
 
             # 1. get endpoints from chain id source
@@ -238,8 +254,9 @@ async def collect_rpc_endpoints() -> Dict[int, List[str]]:
 
             # 3. perform health check on rpc endpoints
             if not endpoints_for_chain:
-                print(f"! No endpoints configured for chain {chain_id}")
-                continue
+                raise Exception(
+                    f"[x!] No endpoints/health endpoints available for chain {chain_id}"
+                )
 
             tasks = set()
             for endpoint in endpoints_for_chain:
@@ -255,20 +272,43 @@ async def collect_rpc_endpoints() -> Dict[int, List[str]]:
                 print(f"! No endpoints configured for chain {chain_id}")
             else:
                 # only healthy endpoints remain
-                rpc_endpoints_dict[str(chain_id)] = sorted(list(endpoints_for_chain))
+                rpc_endpoints_dict[str(chain_id)] = list(endpoints_for_chain)
 
     return rpc_endpoints_dict
 
 
-async def main():
-    chain_endpoints = await collect_rpc_endpoints()
-    chain_endpoints_sorted_by_chain = dict(sorted(chain_endpoints.items(), key=lambda x: int(x[0])))
+# We can use `asyncclick` instead but not looking to add more dependencies than we need.
+def async_coro(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
 
-    with open(LYNX_JSON, 'w') as f:
-        json.dump(chain_endpoints_sorted_by_chain, f, indent=4)
+    return wrapper
 
 
-"""
-Run this file with `python3 ./scripts/generate_endpoint_mapping.py`
-"""
-asyncio.run(main())
+@click.command()
+@click.option(
+    "--domain",
+    "domain",
+    help="TACo Domain",
+    type=click.Choice(["lynx", "tapir", "mainnet"]),
+    required=False,
+)
+@async_coro
+async def generate_endpoint_mapping(domain):
+    """
+    Generate rpc endpoint mappings file for chains associated with domain. If domain is not
+    specified, then mappings files are generated for all supported domains.
+    """
+    domains = [domain] if domain else DOMAINS
+    for domain in domains:
+        endpoint_mappings = await collect_rpc_endpoint_mappings(domain)
+        domain_json_file = get_file_for_domain(domain)
+        write_endpoint_mappings_to_file(
+            json_file=domain_json_file, endpoint_mappings=endpoint_mappings
+        )
+
+    print("-- All done! --")
+
+
+asyncio.run(generate_endpoint_mapping())

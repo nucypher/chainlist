@@ -1,5 +1,6 @@
 {
     "1": [
+        "https://cloudflare-eth.com",
         "https://eth.drpc.org",
         "https://ethereum-public.nodies.app",
         "https://ethereum-rpc.publicnode.com",
@@ -82,6 +83,7 @@
     ],
     "7700": [
         "https://canto-rpc.ansybl.io",
+        "https://canto.gravitychain.io/",
         "https://canto.slingshot.finance",
         "https://mainnode.plexnode.org:8545"
     ],
@@ -89,7 +91,6 @@
         "https://testnet-archive.plexnode.wtf"
     ],
     "8453": [
-        "https://base-public.nodies.app",
         "https://base-rpc.publicnode.com",
         "https://base.drpc.org",
         "https://base.gateway.tenderly.co",
@@ -109,7 +110,6 @@
         "https://arbitrum.drpc.org"
     ],
     "42220": [
-        "https://celo.drpc.org",
         "https://forno.celo.org"
     ],
     "43114": [
@@ -129,6 +129,10 @@
         "https://base-sepolia.drpc.org",
         "https://base-sepolia.gateway.tenderly.co",
         "https://sepolia.base.org"
+    ],
+    "314159": [
+        "https://api.calibration.node.glif.io/rpc/v1",
+        "https://rpc.ankr.com/filecoin_testnet"
     ],
     "421614": [
         "https://api.zan.top/arb-sepolia",
