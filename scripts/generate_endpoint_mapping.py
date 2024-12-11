@@ -239,6 +239,6 @@ async def main():
 
 
 """
-Run this file with `python3 ./scripts/generate_chain_endpoints_mapping.py`
+Run this file with `python3 ./scripts/generate_endpoint_mapping.py`
 """
 asyncio.run(main())
