@@ -50,23 +50,50 @@ LYNX_CHAINS = {
     11155420,  # OP Sepolia Testnet
 }
 
+#
+# Additional endpoints to augment chainid.network list:
+# - chains with less endpoints
+# - chains that didn't have drpc endpoints
+# - use of nodies.app public endpoints
+
+# -
+# - drpc: chainid.network doesn't use drpc endpoints for some chains
 EXTRA_KNOWN_RPC_ENDPOINTS = {
-    56: ["https://bsc.drpc.org"],
+    1: ["https://ethereum-public.nodies.app"],
+    10: ["https://optimism-public.nodies.app"],
+    56: [
+        "https://bsc.drpc.org",
+        "https://binance-smart-chain-public.nodies.app"
+    ],
     97: ["https://bsc-testnet.drpc.org"],
-    100: ["https://gnosis.drpc.org"],
+    100: [
+        "https://gnosis.drpc.org",
+        "https://gnosis-public.nodies.app",
+    ],
+    137: ["https://polygon-public.nodies.app"],
     300: [
-        "https://zksync-era-sepolia.blockpi.network/v1/rpc/public"
+        "https://zksync-era-sepolia.blockpi.network/v1/rpc/public",
         "https://sepolia.era.zksync.dev",
         "https://zksync-sepolia.drpc.org",
     ],
-    8453: ["https://base.drpc.org"],
-    42161: ["https://arbitrum.drpc.org"],
+    8453: [
+        "https://base.drpc.org",
+        "https://base-public.nodies.app",
+    ],
+    42161: [
+        "https://arbitrum.drpc.org",
+        "https://arbitrum-one-public.nodies.app",
+    ],
     42220: ["https://celo.drpc.org"],
     43114: ["https://avalanche.drpc.org"],
-    80002: ["https://polygon-amoy.drpc.org"],
+    80002: [
+        "https://polygon-amoy.drpc.org",
+        "https://polygon-amoy-public.nodies.app",
+    ],
     84532: [
         "https://base-sepolia.gateway.tenderly.co",
-        "https://base-sepolia.drpc.org"
+        "https://base-sepolia.drpc.org",
+        "https://base-sepolia-public.nodies.app",
     ],
     421614: [
         "https://api.zan.top/arb-sepolia",
@@ -75,15 +102,18 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
     ],
     534351: [
         "https://scroll-sepolia.drpc.org",
+        "https://scroll-sepolia-public.nodies.app",
     ],
     534352: [
         "https://scroll.drpc.org",
+        "https://scroll-public.nodies.app",
     ],
     11155420: [
         "https://api.zan.top/opt-sepolia",
         "https://endpoints.omniatech.io/v1/op/sepolia/public",
         "https://optimism-sepolia.blockpi.network/v1/rpc/public",
         "https://optimism-sepolia.gateway.tenderly.co",
+        "https://optimism-sepolia-public.nodies.app",
     ]
 }
 
