@@ -1,5 +1,14 @@
 repos:
 
+  - repo: local
+    hooks:
+      - id: sort
+        name: Ensure Sorting of JSON files
+        entry: python scripts/sort_endpoint_mapping.py
+        language: system
+        types: [ python ]
+        stages: [ commit ]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
