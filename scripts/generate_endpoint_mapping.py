@@ -26,7 +26,7 @@ LYNX_CHAINS = {
     397,  # NEAR Protocol
     398,  # NEAR Protocol Testnet
     7700,  # Canto
-    7701,  # Canto Tesnet
+    7701,  # Canto Testnet
     8453,  # Base
     10200,  # Gnosis Chiado Testnet
     42161,  # Arbitrum One
@@ -65,6 +65,7 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
         "https://sepolia.era.zksync.dev",
         "https://zksync-sepolia.drpc.org",
     ],
+    7701: ["https://canto-testnet.plexnode.wtf"],
     8453: [
         "https://base.drpc.org",
         "https://base-public.nodies.app",
@@ -73,7 +74,11 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
         "https://arbitrum.drpc.org",
         "https://arbitrum-one-public.nodies.app",
     ],
-    42220: ["https://celo.drpc.org"],
+    42220: [
+        "https://celo.drpc.org",
+        "https://1rpc.io/celo",
+        "https://celo.api.onfinality.io/public",
+    ],
     43114: ["https://avalanche.drpc.org"],
     80002: [
         "https://polygon-amoy.drpc.org",
@@ -222,14 +227,16 @@ async def _rpc_endpoint_health_check(
         )
         if not validated_chain_id:
             raise InvalidChainConfiguration(
-                f"[x!] [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
+                f"[x!] chain={expected_chain_id}: [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
             )
 
         validated_block_time = await _validate_block_time(
             session, endpoint, max_drift_seconds
         )
         if not validated_block_time:
-            print(f"[x] RPC endpoint {endpoint} failed health check: drift too large")
+            print(
+                f"[x] chain={expected_chain_id}: RPC endpoint {endpoint} failed health check: drift too large"
+            )
             return False, endpoint
 
         return True, endpoint
@@ -237,7 +244,9 @@ async def _rpc_endpoint_health_check(
     except InvalidChainConfiguration as e:
         raise e
     except Exception as e:
-        print(f"[x] RPC endpoint {endpoint} failed health check: {e.__class__} - {e}")
+        print(
+            f"[x] chain={expected_chain_id}: RPC endpoint {endpoint} failed health check: {e.__class__} - {e}"
+        )
         return False, endpoint
 
 
@@ -267,7 +276,7 @@ async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
             # 3. perform health check on rpc endpoints
             if not endpoints_for_chain:
                 raise Exception(
-                    f"[x!] No endpoints/health endpoints available for chain {chain_id}"
+                    f"[x!] chain={chain_id}: No endpoints/healthy endpoints available"
                 )
 
             tasks = set()
@@ -281,7 +290,9 @@ async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
                         endpoints_for_chain.remove(endpoint)
 
             if not endpoints_for_chain:
-                print(f"! No endpoints configured for chain {chain_id}")
+                raise Exception(
+                    f"[x!] chain={chain_id}: No endpoints/healthy endpoints available"
+                )
             else:
                 # only healthy endpoints remain
                 rpc_endpoints_dict[str(chain_id)] = list(endpoints_for_chain)
@@ -320,7 +331,7 @@ async def generate_endpoint_mapping(domain):
             json_file=domain_json_file, endpoint_mappings=endpoint_mappings
         )
 
-    print("-- All done! --")
+    print("\n-- All done! --")
 
 
 asyncio.run(generate_endpoint_mapping())

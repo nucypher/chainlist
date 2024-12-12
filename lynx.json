@@ -1,6 +1,5 @@
 {
     "1": [
-        "https://cloudflare-eth.com",
         "https://eth.drpc.org",
         "https://ethereum-public.nodies.app",
         "https://ethereum-rpc.publicnode.com",
@@ -73,6 +72,7 @@
     ],
     "314": [
         "https://api.node.glif.io/",
+        "https://filecoin.drpc.org",
         "https://rpc.ankr.com/filecoin"
     ],
     "397": [
@@ -88,9 +88,11 @@
         "https://mainnode.plexnode.org:8545"
     ],
     "7701": [
+        "https://canto-testnet.plexnode.wtf",
         "https://testnet-archive.plexnode.wtf"
     ],
     "8453": [
+        "https://base-public.nodies.app",
         "https://base-rpc.publicnode.com",
         "https://base.drpc.org",
         "https://base.gateway.tenderly.co",
@@ -110,6 +112,8 @@
         "https://arbitrum.drpc.org"
     ],
     "42220": [
+        "https://1rpc.io/celo",
+        "https://celo.api.onfinality.io/public",
         "https://forno.celo.org"
     ],
     "43114": [
@@ -132,6 +136,7 @@
     ],
     "314159": [
         "https://api.calibration.node.glif.io/rpc/v1",
+        "https://filecoin-calibration.drpc.org",
         "https://rpc.ankr.com/filecoin_testnet"
     ],
     "421614": [
