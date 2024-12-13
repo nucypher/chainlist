@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pre-commit = '*'
+
+[packages]
+requests = "*"
+aiohttp = "*"
+click = "*"
+
+[requires]
+python_version = "3.12"
+
+[pipenv]
+allow_prereleases = true
+
+[scripts]
+sort_endpoint_mapping = "python3 scripts/sort_endpoint_mapping.py"
+generate_endpoint_mapping = "python3 scripts/generate_endpoint_mapping.py"

@@ -1,0 +1,22 @@
+name: 🧹 Black
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  black-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - uses: psf/black@24.10.0
+        with:
+          options: "--check --verbose"
+          version: "24.10.0"
