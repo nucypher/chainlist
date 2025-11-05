@@ -46,14 +46,11 @@
         "https://data-seed-prebsc-2-s3.bnbchain.org:8545"
     ],
     "100": [
-        "https://gnosis-mainnet.public.blastapi.io",
         "https://gnosis-public.nodies.app",
         "https://gnosis-rpc.publicnode.com",
         "https://gnosis.api.onfinality.io/public",
-        "https://gnosis.blockpi.network/v1/rpc/public",
         "https://gnosis.drpc.org",
         "https://gnosis.oat.farm",
-        "https://rpc.ankr.com/gnosis",
         "https://rpc.gnosis.gateway.fm",
         "https://rpc.gnosischain.com"
     ],
@@ -67,7 +64,6 @@
     ],
     "300": [
         "https://sepolia.era.zksync.dev",
-        "https://zksync-era-sepolia.blockpi.network/v1/rpc/public",
         "https://zksync-sepolia.drpc.org"
     ],
     "314": [
@@ -83,13 +79,7 @@
     ],
     "7700": [
         "https://canto-rpc.ansybl.io",
-        "https://canto.gravitychain.io/",
-        "https://canto.slingshot.finance",
-        "https://mainnode.plexnode.org:8545"
-    ],
-    "7701": [
-        "https://canto-testnet.plexnode.wtf",
-        "https://testnet-archive.plexnode.wtf"
+        "https://canto.gravitychain.io/"
     ],
     "8453": [
         "https://base-public.nodies.app",
@@ -108,12 +98,13 @@
     "42161": [
         "https://arb1.arbitrum.io/rpc",
         "https://arbitrum-one-public.nodies.app",
-        "https://arbitrum-one.publicnode.com",
+        "https://arbitrum-one-rpc.publicnode.com",
         "https://arbitrum.drpc.org"
     ],
     "42220": [
         "https://1rpc.io/celo",
         "https://celo.api.onfinality.io/public",
+        "https://celo.drpc.org",
         "https://forno.celo.org"
     ],
     "43114": [
@@ -141,29 +132,26 @@
     ],
     "421614": [
         "https://api.zan.top/arb-sepolia",
+        "https://arbitrum-sepolia-rpc.publicnode.com",
         "https://arbitrum-sepolia.drpc.org",
         "https://arbitrum-sepolia.gateway.tenderly.co",
         "https://sepolia-rollup.arbitrum.io/rpc"
     ],
     "534351": [
-        "https://rpc.ankr.com/scroll_sepolia_testnet",
         "https://scroll-sepolia-public.nodies.app",
         "https://scroll-sepolia-rpc.publicnode.com",
-        "https://scroll-sepolia.chainstacklabs.com",
-        "https://scroll-testnet-public.unifra.io",
+        "https://scroll-sepolia.drpc.org",
         "https://sepolia-rpc.scroll.io"
     ],
     "534352": [
-        "https://rpc.ankr.com/scroll",
         "https://rpc.scroll.io",
-        "https://scroll-mainnet.chainstacklabs.com",
         "https://scroll-public.nodies.app",
         "https://scroll-rpc.publicnode.com",
         "https://scroll.drpc.org"
     ],
     "11155111": [
+        "https://eth-sepolia.g.alchemy.com/v2/WddzdzI2o9S3COdT73d5w6AIogbKq4X-",
         "https://ethereum-sepolia-rpc.publicnode.com",
-        "https://rpc-sepolia.rockx.com",
         "https://rpc.sepolia.ethpandaops.io",
         "https://sepolia.drpc.org",
         "https://sepolia.gateway.tenderly.co"
@@ -172,9 +160,11 @@
         "https://api.zan.top/opt-sepolia",
         "https://endpoints.omniatech.io/v1/op/sepolia/public",
         "https://optimism-sepolia-public.nodies.app",
-        "https://optimism-sepolia.blockpi.network/v1/rpc/public",
         "https://optimism-sepolia.drpc.org",
         "https://optimism-sepolia.gateway.tenderly.co",
         "https://sepolia.optimism.io"
+    ],
+    "1660990954": [
+        "https://public.sepolia.rpc.status.network"
     ]
 }
