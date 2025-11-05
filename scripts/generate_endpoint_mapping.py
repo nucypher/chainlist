@@ -26,7 +26,8 @@ LYNX_CHAINS = {
     397,  # NEAR Protocol
     398,  # NEAR Protocol Testnet
     7700,  # Canto
-    7701,  # Canto Testnet
+    # TODO: No viable endpoints available for Canto Testnet during last execution of script
+    # 7701,  # Canto Testnet
     8453,  # Base
     10200,  # Gnosis Chiado Testnet
     42161,  # Arbitrum One
@@ -40,6 +41,7 @@ LYNX_CHAINS = {
     534352,  # Scroll
     11155111,  # Sepolia
     11155420,  # OP Sepolia Testnet
+    1660990954,  # Status Sepolia Testnet
 }
 
 #
@@ -65,7 +67,7 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
         "https://sepolia.era.zksync.dev",
         "https://zksync-sepolia.drpc.org",
     ],
-    7701: ["https://canto-testnet.plexnode.wtf"],
+    # 7701: ["https://canto-testnet.plexnode.wtf"],
     8453: [
         "https://base.drpc.org",
         "https://base-public.nodies.app",
@@ -109,6 +111,7 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
         "https://optimism-sepolia.gateway.tenderly.co",
         "https://optimism-sepolia-public.nodies.app",
     ],
+    1660990954: ["https://public.sepolia.rpc.status.network"],
 }
 
 DOMAINS = ["lynx", "tapir", "mainnet"]
