@@ -139,7 +139,6 @@
     ],
     "534351": [
         "https://scroll-sepolia-public.nodies.app",
-        "https://scroll-sepolia-rpc.publicnode.com",
         "https://scroll-sepolia.drpc.org",
         "https://sepolia-rpc.scroll.io"
     ],
@@ -150,7 +149,6 @@
         "https://scroll.drpc.org"
     ],
     "11155111": [
-        "https://eth-sepolia.g.alchemy.com/v2/WddzdzI2o9S3COdT73d5w6AIogbKq4X-",
         "https://ethereum-sepolia-rpc.publicnode.com",
         "https://rpc.sepolia.ethpandaops.io",
         "https://sepolia.drpc.org",

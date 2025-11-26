@@ -11,6 +11,49 @@
         "https://rpc.mevblocker.io/fullprivacy",
         "https://rpc.mevblocker.io/noreverts"
     ],
+    "10": [
+        "https://mainnet.optimism.io",
+        "https://optimism-public.nodies.app",
+        "https://optimism-rpc.publicnode.com",
+        "https://optimism.drpc.org",
+        "https://optimism.gateway.tenderly.co"
+    ],
+    "56": [
+        "https://binance-smart-chain-public.nodies.app",
+        "https://bsc-dataseed1.bnbchain.org",
+        "https://bsc-dataseed1.defibit.io",
+        "https://bsc-dataseed1.ninicoin.io",
+        "https://bsc-dataseed2.bnbchain.org",
+        "https://bsc-dataseed2.defibit.io",
+        "https://bsc-dataseed2.ninicoin.io",
+        "https://bsc-dataseed3.bnbchain.org",
+        "https://bsc-dataseed3.defibit.io",
+        "https://bsc-dataseed3.ninicoin.io",
+        "https://bsc-dataseed4.bnbchain.org",
+        "https://bsc-dataseed4.defibit.io",
+        "https://bsc-dataseed4.ninicoin.io",
+        "https://bsc-rpc.publicnode.com",
+        "https://bsc.drpc.org"
+    ],
+    "97": [
+        "https://bsc-testnet-rpc.publicnode.com",
+        "https://bsc-testnet.drpc.org",
+        "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
+        "https://data-seed-prebsc-1-s2.bnbchain.org:8545",
+        "https://data-seed-prebsc-1-s3.bnbchain.org:8545",
+        "https://data-seed-prebsc-2-s1.bnbchain.org:8545",
+        "https://data-seed-prebsc-2-s2.bnbchain.org:8545",
+        "https://data-seed-prebsc-2-s3.bnbchain.org:8545"
+    ],
+    "100": [
+        "https://gnosis-public.nodies.app",
+        "https://gnosis-rpc.publicnode.com",
+        "https://gnosis.api.onfinality.io/public",
+        "https://gnosis.drpc.org",
+        "https://gnosis.oat.farm",
+        "https://rpc.gnosis.gateway.fm",
+        "https://rpc.gnosischain.com"
+    ],
     "137": [
         "https://polygon-bor-rpc.publicnode.com",
         "https://polygon-public.nodies.app",
@@ -18,5 +61,108 @@
         "https://polygon.drpc.org",
         "https://polygon.gateway.tenderly.co",
         "https://rpc-mainnet.matic.quiknode.pro"
+    ],
+    "300": [
+        "https://sepolia.era.zksync.dev",
+        "https://zksync-sepolia.drpc.org"
+    ],
+    "314": [
+        "https://api.node.glif.io/",
+        "https://filecoin.drpc.org",
+        "https://rpc.ankr.com/filecoin"
+    ],
+    "397": [
+        "https://eth-rpc.mainnet.near.org"
+    ],
+    "398": [
+        "https://eth-rpc.testnet.near.org"
+    ],
+    "7700": [
+        "https://canto-rpc.ansybl.io",
+        "https://canto.gravitychain.io/"
+    ],
+    "8453": [
+        "https://base-public.nodies.app",
+        "https://base-rpc.publicnode.com",
+        "https://base.drpc.org",
+        "https://base.gateway.tenderly.co",
+        "https://developer-access-mainnet.base.org/",
+        "https://mainnet.base.org/"
+    ],
+    "10200": [
+        "https://gnosis-chiado-rpc.publicnode.com",
+        "https://gnosis-chiado.drpc.org",
+        "https://rpc.chiado.gnosis.gateway.fm",
+        "https://rpc.chiadochain.net"
+    ],
+    "42161": [
+        "https://arb1.arbitrum.io/rpc",
+        "https://arbitrum-one-public.nodies.app",
+        "https://arbitrum-one-rpc.publicnode.com",
+        "https://arbitrum.drpc.org"
+    ],
+    "42220": [
+        "https://1rpc.io/celo",
+        "https://celo.api.onfinality.io/public",
+        "https://celo.drpc.org",
+        "https://forno.celo.org"
+    ],
+    "43114": [
+        "https://api.avax.network/ext/bc/C/rpc",
+        "https://avalanche-c-chain-rpc.publicnode.com",
+        "https://avalanche.drpc.org"
+    ],
+    "80002": [
+        "https://polygon-amoy-bor-rpc.publicnode.com",
+        "https://polygon-amoy-public.nodies.app",
+        "https://polygon-amoy.drpc.org",
+        "https://rpc-amoy.polygon.technology"
+    ],
+    "84532": [
+        "https://base-sepolia-public.nodies.app",
+        "https://base-sepolia-rpc.publicnode.com",
+        "https://base-sepolia.drpc.org",
+        "https://base-sepolia.gateway.tenderly.co",
+        "https://sepolia.base.org"
+    ],
+    "314159": [
+        "https://api.calibration.node.glif.io/rpc/v1",
+        "https://filecoin-calibration.drpc.org",
+        "https://rpc.ankr.com/filecoin_testnet"
+    ],
+    "421614": [
+        "https://api.zan.top/arb-sepolia",
+        "https://arbitrum-sepolia-rpc.publicnode.com",
+        "https://arbitrum-sepolia.drpc.org",
+        "https://arbitrum-sepolia.gateway.tenderly.co",
+        "https://sepolia-rollup.arbitrum.io/rpc"
+    ],
+    "534351": [
+        "https://scroll-sepolia-public.nodies.app",
+        "https://scroll-sepolia.drpc.org",
+        "https://sepolia-rpc.scroll.io"
+    ],
+    "534352": [
+        "https://rpc.scroll.io",
+        "https://scroll-public.nodies.app",
+        "https://scroll-rpc.publicnode.com",
+        "https://scroll.drpc.org"
+    ],
+    "11155111": [
+        "https://ethereum-sepolia-rpc.publicnode.com",
+        "https://rpc.sepolia.ethpandaops.io",
+        "https://sepolia.drpc.org",
+        "https://sepolia.gateway.tenderly.co"
+    ],
+    "11155420": [
+        "https://api.zan.top/opt-sepolia",
+        "https://endpoints.omniatech.io/v1/op/sepolia/public",
+        "https://optimism-sepolia-public.nodies.app",
+        "https://optimism-sepolia.drpc.org",
+        "https://optimism-sepolia.gateway.tenderly.co",
+        "https://sepolia.optimism.io"
+    ],
+    "1660990954": [
+        "https://public.sepolia.rpc.status.network"
     ]
 }
