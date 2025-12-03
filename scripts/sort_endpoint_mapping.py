@@ -37,4 +37,4 @@ def sort_endpoint_mapping(domain):
 
 
 if __name__ == "__main__":
-    sort_endpoint_mapping()
+    sort_endpoint_mapping(None)

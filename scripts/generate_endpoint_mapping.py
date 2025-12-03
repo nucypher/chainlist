@@ -10,11 +10,7 @@ from urllib.parse import urlparse
 
 from utils import get_file_for_domain, write_endpoint_mappings_to_file
 
-MAINNET_CHAINS = [1, 137]  # Ethereum Mainnet  # Polygon Mainnet
-
-TAPIR_CHAINS = [80002, 11155111]  # Polygon Amoy  # Sepolia
-
-LYNX_CHAINS = {
+ALL_CHAINS = {
     1,  # Ethereum Mainnet
     10,  # OP Mainnet
     56,  # BNB Smart Chain Mainnet
@@ -117,9 +113,9 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
 DOMAINS = ["lynx", "tapir", "mainnet"]
 
 DOMAIN_CHAINS = {
-    "lynx": LYNX_CHAINS,
-    "tapir": TAPIR_CHAINS,
-    "mainnet": MAINNET_CHAINS,
+    "lynx": ALL_CHAINS,
+    "tapir": ALL_CHAINS,
+    "mainnet": ALL_CHAINS,
 }
 
 CHAINID_NETWORK = "https://chainid.network/chains.json"
