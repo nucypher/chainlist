@@ -13,6 +13,7 @@ from utils import get_file_for_domain, write_endpoint_mappings_to_file
 ALL_CHAINS = {
     1,  # Ethereum Mainnet
     10,  # OP Mainnet
+    42,  # LUKSO Mainnet
     56,  # BNB Smart Chain Mainnet
     97,  # BNB Smart Chain Testnet
     100,  # Gnosis
