@@ -18,6 +18,11 @@
         "https://optimism.drpc.org",
         "https://optimism.gateway.tenderly.co"
     ],
+    "42": [
+        "https://42.rpc.thirdweb.com",
+        "https://rpc.lukso.sigmacore.io",
+        "https://rpc.mainnet.lukso.network"
+    ],
     "56": [
         "https://binance-smart-chain-public.nodies.app",
         "https://bsc-dataseed1.bnbchain.org",
@@ -48,7 +53,6 @@
     "100": [
         "https://gnosis-public.nodies.app",
         "https://gnosis-rpc.publicnode.com",
-        "https://gnosis.api.onfinality.io/public",
         "https://gnosis.drpc.org",
         "https://gnosis.oat.farm",
         "https://rpc.gnosis.gateway.fm",
@@ -78,8 +82,7 @@
         "https://eth-rpc.testnet.near.org"
     ],
     "7700": [
-        "https://canto-rpc.ansybl.io",
-        "https://canto.gravitychain.io/"
+        "https://canto-rpc.ansybl.io"
     ],
     "8453": [
         "https://base-public.nodies.app",
@@ -103,7 +106,6 @@
     ],
     "42220": [
         "https://1rpc.io/celo",
-        "https://celo.api.onfinality.io/public",
         "https://celo.drpc.org",
         "https://forno.celo.org"
     ],
@@ -139,6 +141,7 @@
     ],
     "534351": [
         "https://scroll-sepolia-public.nodies.app",
+        "https://scroll-sepolia-rpc.publicnode.com",
         "https://scroll-sepolia.drpc.org",
         "https://sepolia-rpc.scroll.io"
     ],
@@ -150,7 +153,6 @@
     ],
     "11155111": [
         "https://ethereum-sepolia-rpc.publicnode.com",
-        "https://rpc.sepolia.ethpandaops.io",
         "https://sepolia.drpc.org",
         "https://sepolia.gateway.tenderly.co"
     ],
