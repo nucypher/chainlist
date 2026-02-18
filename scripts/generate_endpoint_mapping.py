@@ -32,7 +32,8 @@ ALL_CHAINS = {
     43114,  # Avalanche C-Chain
     80002,  # Amoy
     84532,  # Base Sepolia Testnet
-    314159,  # Filecoin - Calibration testnet
+    # TODO: No viable endpoints available for Filecoin - Calibration testnet during last execution of script
+    # 314159,  # Filecoin - Calibration testnet
     421614,  # Arbitrum Sepolia
     534351,  # Scroll Sepolia Testnet
     534352,  # Scroll
