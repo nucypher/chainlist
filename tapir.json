@@ -20,7 +20,6 @@
     ],
     "42": [
         "https://42.rpc.thirdweb.com",
-        "https://rpc.lukso.sigmacore.io",
         "https://rpc.mainnet.lukso.network"
     ],
     "56": [
@@ -61,7 +60,6 @@
     "137": [
         "https://polygon-bor-rpc.publicnode.com",
         "https://polygon-public.nodies.app",
-        "https://polygon-rpc.com/",
         "https://polygon.drpc.org",
         "https://polygon.gateway.tenderly.co",
         "https://rpc-mainnet.matic.quiknode.pro"
@@ -82,7 +80,8 @@
         "https://eth-rpc.testnet.near.org"
     ],
     "7700": [
-        "https://canto-rpc.ansybl.io"
+        "https://canto-rpc.ansybl.io",
+        "https://canto.gravitychain.io/"
     ],
     "8453": [
         "https://base-public.nodies.app",
@@ -127,11 +126,6 @@
         "https://base-sepolia.gateway.tenderly.co",
         "https://sepolia.base.org"
     ],
-    "314159": [
-        "https://api.calibration.node.glif.io/rpc/v1",
-        "https://filecoin-calibration.drpc.org",
-        "https://rpc.ankr.com/filecoin_testnet"
-    ],
     "421614": [
         "https://api.zan.top/arb-sepolia",
         "https://arbitrum-sepolia-rpc.publicnode.com",
@@ -153,12 +147,12 @@
     ],
     "11155111": [
         "https://ethereum-sepolia-rpc.publicnode.com",
+        "https://rpc.sepolia.ethpandaops.io",
         "https://sepolia.drpc.org",
         "https://sepolia.gateway.tenderly.co"
     ],
     "11155420": [
         "https://api.zan.top/opt-sepolia",
-        "https://endpoints.omniatech.io/v1/op/sepolia/public",
         "https://optimism-sepolia-public.nodies.app",
         "https://optimism-sepolia.drpc.org",
         "https://optimism-sepolia.gateway.tenderly.co",
