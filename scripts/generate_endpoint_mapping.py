@@ -115,14 +115,6 @@ CHAINID_NETWORK = "https://chainid.network/chains.json"
 IPFS_SUPPLEMENTAL_URL = "https://gateway.pinata.cloud/ipfs/bafkreidw44bgpzeafnw4a7sgwv3mt2hvisuufumnucbglkefl2joetkimq"
 
 
-class InvalidChainConfiguration(ValueError):
-    """
-    Raised when endpoint's chain id does not matched expected chain id.
-    """
-
-    pass
-
-
 def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
     rpc_endpoints = set()
     for endpoint in endpoints:
@@ -243,9 +235,10 @@ async def _rpc_endpoint_health_check(
             session, endpoint, expected_chain_id
         )
         if not validated_chain_id:
-            raise InvalidChainConfiguration(
+            print(
                 f"[x!] chain={expected_chain_id}: [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
             )
+            return False, endpoint
 
         validated_block_time = await _validate_block_time(
             session, endpoint, max_drift_seconds
@@ -257,9 +250,6 @@ async def _rpc_endpoint_health_check(
             return False, endpoint
 
         return True, endpoint
-
-    except InvalidChainConfiguration as e:
-        raise e
     except Exception as e:
         print(
             f"[x] chain={expected_chain_id}: RPC endpoint {endpoint} failed health check: {e.__class__} - {e}"
