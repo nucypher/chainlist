@@ -315,7 +315,9 @@ async def collect_rpc_endpoint_mappings(chains: List[int]) -> Dict[str, List[str
             endpoints_for_chain.update(supp_endpoints)
 
             # 3. get endpoints from extra rpc urls source
-            extra_endpoints = EXTRA_KNOWN_RPC_ENDPOINTS.get(chain_id, [])
+            extra_endpoints = process_rpc_endpoints(
+                EXTRA_KNOWN_RPC_ENDPOINTS.get(chain_id, [])
+            )
             endpoints_for_chain.update(extra_endpoints)
 
             # 3. perform health check on rpc endpoints
