@@ -140,15 +140,28 @@ def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
             continue
 
         # urls with API keys aren't likely to work long term
-        contains_api_key = False
+        # 1. don't use URLs with query strings - these are likely to contain API keys
+        if url_components.query:
+            print(
+                f"[x] Skipping endpoint with query string (potential API key): {endpoint}"
+            )
+            continue
+
+        # 2. check path
+        path_potentially_contains_api_key = False
         segments = url_components.path.split("/")
         for segment in segments:
-            # Segments that are 16+ chars are likely API keys/secrets
-            if len(segment) >= 16:
-                contains_api_key = True
+            # segments that are 24+ chars are likely API keys/secrets
+            # really they seem to be >= 32 chars but using 24 to be more conservative
+            if len(segment) >= 24:
+                path_potentially_contains_api_key = True
                 break
-        if contains_api_key:
+        if path_potentially_contains_api_key:
+            print(f"[x] Skipping endpoint with potential API key in path: {endpoint}")
             continue
+
+        # strip trailing slash if it exists for consistency
+        endpoint = endpoint.rstrip("/")
 
         rpc_endpoints.add(endpoint)
     return list(rpc_endpoints)
