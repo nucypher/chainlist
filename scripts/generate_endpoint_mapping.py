@@ -133,9 +133,21 @@ def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
             # - https://mainnet.infura.io/v3/${ALCHEMY_API_KEY}
             continue
 
-        # only use https endpoints
         url_components = urlparse(endpoint)
+
+        # only use https endpoints
         if url_components.scheme != "https":
+            continue
+
+        # urls with API keys aren't likely to work long term
+        contains_api_key = False
+        segments = url_components.path.split("/")
+        for segment in segments:
+            # Segments that are 16+ chars are likely API keys/secrets
+            if len(segment) >= 16:
+                contains_api_key = True
+                break
+        if contains_api_key:
             continue
 
         rpc_endpoints.add(endpoint)
