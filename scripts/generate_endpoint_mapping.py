@@ -1,8 +1,6 @@
 import asyncio
 import time
-from functools import wraps
 
-import click
 from aiohttp import ClientSession
 from typing import Dict, List, Tuple
 from urllib.parse import urlparse
@@ -322,17 +320,6 @@ async def collect_rpc_endpoint_mappings(chains: List[int]) -> Dict[str, List[str
     return rpc_endpoints_dict
 
 
-# We can use `asyncclick` instead but not looking to add more dependencies than we need.
-def async_coro(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
-
-
-@click.command()
-@async_coro
 async def generate_endpoint_mapping():
     """
     Generate rpc endpoint mappings file for relevant chains for all TACo domains.
@@ -347,4 +334,5 @@ async def generate_endpoint_mapping():
     print("\n-- All done! --")
 
 
-asyncio.run(generate_endpoint_mapping())
+if __name__ == "__main__":
+    asyncio.run(generate_endpoint_mapping())
