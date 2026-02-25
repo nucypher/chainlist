@@ -1,16 +1,13 @@
 import asyncio
 import time
-from functools import wraps
 
-import click
 from aiohttp import ClientSession
-from pathlib import Path
 from typing import Dict, List, Tuple
 from urllib.parse import urlparse
 
 from utils import get_file_for_domain, write_endpoint_mappings_to_file
 
-ALL_CHAINS = {
+ALL_CHAINS = [
     1,  # Ethereum Mainnet
     10,  # OP Mainnet
     42,  # LUKSO Mainnet
@@ -40,7 +37,7 @@ ALL_CHAINS = {
     11155111,  # Sepolia
     11155420,  # OP Sepolia Testnet
     1660990954,  # Status Sepolia Testnet
-}
+]
 
 #
 # Additional endpoints to augment chainid.network list:
@@ -114,22 +111,8 @@ EXTRA_KNOWN_RPC_ENDPOINTS = {
 
 DOMAINS = ["lynx", "tapir", "mainnet"]
 
-DOMAIN_CHAINS = {
-    "lynx": ALL_CHAINS,
-    "tapir": ALL_CHAINS,
-    "mainnet": ALL_CHAINS,
-}
-
 CHAINID_NETWORK = "https://chainid.network/chains.json"
-LYNX_JSON = Path(__file__).parent.parent / "lynx.json"
-
-
-class InvalidChainConfiguration(ValueError):
-    """
-    Raised when endpoint's chain id does not matched expected chain id.
-    """
-
-    pass
+IPFS_SUPPLEMENTAL_URL = "https://gateway.pinata.cloud/ipfs/bafkreidw44bgpzeafnw4a7sgwv3mt2hvisuufumnucbglkefl2joetkimq"
 
 
 def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
@@ -142,24 +125,49 @@ def process_rpc_endpoints(endpoints: List[str]) -> List[str]:
             # - https://mainnet.infura.io/v3/${ALCHEMY_API_KEY}
             continue
 
-        # only use https endpoints
         url_components = urlparse(endpoint)
+
+        # only use https endpoints
         if url_components.scheme != "https":
             continue
+
+        # urls with API keys aren't likely to work long term
+        # 1. don't use URLs with query strings - these are likely to contain API keys
+        if url_components.query:
+            print(
+                f"[x] Skipping endpoint with query string (potential API key): {endpoint}"
+            )
+            continue
+
+        # 2. check path
+        path_potentially_contains_api_key = False
+        segments = url_components.path.split("/")
+        for segment in segments:
+            # segments that are 24+ chars are likely API keys/secrets
+            # really they seem to be >= 32 chars but using 24 to be more conservative
+            if len(segment) >= 24:
+                path_potentially_contains_api_key = True
+                break
+        if path_potentially_contains_api_key:
+            print(f"[x] Skipping endpoint with potential API key in path: {endpoint}")
+            continue
+
+        # strip trailing slash if it exists for consistency
+        endpoint = endpoint.rstrip("/")
 
         rpc_endpoints.add(endpoint)
     return list(rpc_endpoints)
 
 
 async def _fetch_chain_id_network_public_rpc_endpoints(
-    session: ClientSession, domain_chains: List[int]
+    session: ClientSession, chains: List[int]
 ) -> Dict[int, List[str]]:
     async with session.get(CHAINID_NETWORK) as response:
         chain_id_network_result = await response.json()
         chain_id_endpoints_dict = {}
         for entry in chain_id_network_result:
             chain_id = entry["chainId"]
-            if chain_id in domain_chains:
+            if chain_id in chains:
                 chain_id_endpoints_dict[chain_id] = process_rpc_endpoints(
                     entry.get("rpc", [])
                 )
@@ -227,9 +235,10 @@ async def _rpc_endpoint_health_check(
             session, endpoint, expected_chain_id
         )
         if not validated_chain_id:
-            raise InvalidChainConfiguration(
+            print(
                 f"[x!] chain={expected_chain_id}: [CONFIG ERROR] RPC endpoint {endpoint} configured for incorrect chain"
             )
+            return False, endpoint
 
         validated_block_time = await _validate_block_time(
             session, endpoint, max_drift_seconds
@@ -241,9 +250,6 @@ async def _rpc_endpoint_health_check(
             return False, endpoint
 
         return True, endpoint
-
-    except InvalidChainConfiguration as e:
-        raise e
     except Exception as e:
         print(
             f"[x] chain={expected_chain_id}: RPC endpoint {endpoint} failed health check: {e.__class__} - {e}"
@@ -251,17 +257,41 @@ async def _rpc_endpoint_health_check(
         return False, endpoint
 
 
-async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
+async def _fetch_supplemental_endpoints(chains: List[int]) -> Dict[int, List[str]]:
+    """
+    Fetch supplemental rpc endpoints from IPFS.
+    """
+    async with ClientSession() as session:
+        async with session.get(IPFS_SUPPLEMENTAL_URL) as response:
+            result = await response.json()
+            supplemental_endpoints = {}
+            for entry in result.values():
+                if "chainId" not in entry or "endpoints" not in entry:
+                    # skip entries that don't have chainId or endpoints keys (eg. 'metadata' entry)
+                    continue
+
+                chain_id = entry["chainId"]
+                if chain_id in chains:
+                    endpoints_for_chain = entry["endpoints"]
+                    if endpoints_for_chain:
+                        supplemental_endpoints[chain_id] = process_rpc_endpoints(
+                            endpoints_for_chain
+                        )
+
+            return supplemental_endpoints
+
+
+async def collect_rpc_endpoint_mappings(chains: List[int]) -> Dict[str, List[str]]:
     rpc_endpoints_dict = {}
 
-    domain_chains = DOMAIN_CHAINS[domain]
+    supplemental_endpoints = await _fetch_supplemental_endpoints(chains)
 
     # do this once
     async with ClientSession() as session:
         chain_id_network_rpc_endpoints = (
-            await _fetch_chain_id_network_public_rpc_endpoints(session, domain_chains)
+            await _fetch_chain_id_network_public_rpc_endpoints(session, chains)
         )
-        for chain_id in domain_chains:
+        for chain_id in chains:
             endpoints_for_chain = set()
 
             # 1. get endpoints from chain id source
@@ -270,8 +300,14 @@ async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
             )
             endpoints_for_chain.update(chain_id_network_endpoints)
 
-            # 2. get endpoints from extra rpc urls source
-            extra_endpoints = EXTRA_KNOWN_RPC_ENDPOINTS.get(chain_id, [])
+            # 2. add supplemental endpoints from ipfs source: https://docs.erpc.cloud/free#how-it-works
+            supp_endpoints = supplemental_endpoints.get(chain_id, [])
+            endpoints_for_chain.update(supp_endpoints)
+
+            # 3. get endpoints from extra rpc urls source
+            extra_endpoints = process_rpc_endpoints(
+                EXTRA_KNOWN_RPC_ENDPOINTS.get(chain_id, [])
+            )
             endpoints_for_chain.update(extra_endpoints)
 
             # 3. perform health check on rpc endpoints
@@ -301,32 +337,12 @@ async def collect_rpc_endpoint_mappings(domain) -> Dict[str, List[str]]:
     return rpc_endpoints_dict
 
 
-# We can use `asyncclick` instead but not looking to add more dependencies than we need.
-def async_coro(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
-
-
-@click.command()
-@click.option(
-    "--domain",
-    "domain",
-    help="TACo Domain",
-    type=click.Choice(["lynx", "tapir", "mainnet"]),
-    required=False,
-)
-@async_coro
-async def generate_endpoint_mapping(domain):
+async def generate_endpoint_mapping():
     """
-    Generate rpc endpoint mappings file for chains associated with domain. If domain is not
-    specified, then mappings files are generated for all supported domains.
+    Generate rpc endpoint mappings file for relevant chains for all TACo domains.
     """
-    domains = [domain] if domain else DOMAINS
-    for domain in domains:
-        endpoint_mappings = await collect_rpc_endpoint_mappings(domain)
+    endpoint_mappings = await collect_rpc_endpoint_mappings(ALL_CHAINS)
+    for domain in DOMAINS:
         domain_json_file = get_file_for_domain(domain)
         write_endpoint_mappings_to_file(
             json_file=domain_json_file, endpoint_mappings=endpoint_mappings
@@ -335,4 +351,5 @@ async def generate_endpoint_mapping(domain):
     print("\n-- All done! --")
 
 
-asyncio.run(generate_endpoint_mapping())
+if __name__ == "__main__":
+    asyncio.run(generate_endpoint_mapping())
